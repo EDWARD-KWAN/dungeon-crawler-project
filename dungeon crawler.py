@@ -6,7 +6,7 @@ class entity:
   self.health = health
   self.damage = damage
 
- def is_alive(self):
+ def alive(self):
   return self.health > 0
 
  def take_damage(self, amount):
@@ -24,23 +24,25 @@ class player (entity):
   self.equipment = equipment
   self.score = 0 # set the score, cannot be an attribute
  
- def attack(self, other):
+ def attacks(self, other):
   total_damage = self.damage
   if self.equipment:
-   total_damage *= self.equipment.damagemult
-   print(f"{self.name} attacks with {self.equipment.name if self.equipment else 'no weapon'} for {total_damage} damage!")
+   total_damage *= self.equipment.damagemult # time the total damage
+   print(f"{self.name} attacks with {self.equipment.name} for {total_damage} damage!")
    other.take_damage(total_damage)
-  if not other.is_alive():
+  if not other.alive():
    self.score += 1 # score/0 + 1
   print(f"{other.name} is defeated! Score: {self.score}")
+  
   
 class equipment:
  def __init__(self, name, damagemult):
   self.name = name
   self.damagemult = damagemult
-sword= equipment('sword', 5)
-dagger= equipment('sword',10)
-beserk = equipment('fire', 3)
+sword= equipment('sword', 2)
+dagger= equipment('dagger',3)
+beserk = equipment('fire', 1)
+
 
 
 class enemies(entity):
@@ -67,33 +69,56 @@ bosses = [
 def playerpreset(select): # return to this  playerpreset(choice). this would be used in new game selection
                           # this to make it more easier
     if select == 'A':
-        return player("Knight", 100, 10, sword)
+        return player("Knight", 1000, 10, sword)
     elif select == 'B':
-        return player("Assassin", 70, 20, dagger)
+        return player("Assassin", 7000, 20, dagger)
     elif select == 'C':
-        return player("Tank", 200, 5, beserk)
+        return player("Tank", 20000, 5, beserk)
     else:
-        return None
-# this can be used 
+        return None # no variable or nothing
 
-def map()
+
+def combat():
+ enemys_list = enemy + bosses
+ random.shuffle(enemys_list) # shuffle to new list
+
+ for opponent in enemys_list:
+   print(f'a {opponent.name} caught you')
+   while opponent.alive() and player_set.alive(): # connect form line nine
+    player_set.attacks(opponent)
+    if opponent.alive():
+     opponent.attack(player_set)
+    if not player_set.alive():
+     print("You have Varnish")
+     
+    
+    else:
+     print(f'You defeat {opponent.name} \n continue your journey')
+
+
+
+  
+  
+
+
+ 
  
  
 
 def menu ():
- '''DUNGEON ATTACKER
+ print('''DUNGEON ATTACKER
  (A) Play
  (B) Continue Play
  (C) High Score
- (D) Exit'''
+ (D) Exit''')
  while True:
-  choose = input('choose').upper
+  choose = input('choose').upper()
   if choose == 'A':
    create_game()
   elif choose == 'B':
    continue_play ()
   elif choose == 'C':
-   high_score()
+   pass
   elif choose == 'D':
    break
   else:
@@ -101,14 +126,15 @@ def menu ():
    menu()
   
 def create_game ():
+ 
+ global player_set # relearn global since i forgot global can be vesatile in all function
  while True:
-  
-  '''Choose A Character
+  print('''Choose A Character
  (A) Knight
  (B) Dagger
  (C) Tank
- (D) Back to menu'''
-  choose = (input('choose a class for your adventure')).upper
+ (D) Back to menu''')
+  choose = (input('choose a class for your adventure')).upper()
   if choose in ['A', 'B', 'C']: # since there 3 option of choosing character from character preset 
                                 # using elif as exit.
                                 #by using in/or used shared behavior
@@ -116,8 +142,8 @@ def create_game ():
                                 #but using  playerpreset(choose) can be useful for having a preset
                                 # then have differewnt behavior such like 
                                 #if and elif 
-   player = playerpreset(choose)
-   print(f"You selected {player.name}!")
+   player_set = playerpreset(choose)
+   print(f"You selected {player_set.name}!")
    continue_play()
    break # stop while loop
   elif choose == 'D':
@@ -127,8 +153,13 @@ def create_game ():
 
 
 def continue_play ():
- if 
+ if not player_set:
+  print ('you dont have a player selected')
+  return # dosen't continue to start combat(). will start error
 
-def high_score ():
+ print (f'hello {player_set.name} your journey have process')
+ combat()
 
+player_set =None # found that using none as null value is good so it won't give me error to define
 
+menu()
