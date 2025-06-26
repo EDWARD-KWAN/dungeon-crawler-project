@@ -16,6 +16,7 @@ class entity:
  def attack(self, other): # other user /enemy
   print(f"{self.name} attacks {other.name} for {self.damage} damage!")
   other.take_damage(self.damage)
+  
 
   
 class player (entity):
@@ -30,9 +31,10 @@ class player (entity):
    total_damage *= self.equipment.damagemult # time the total damage
    print(f"{self.name} attacks with {self.equipment.name} for {total_damage} damage!")
    other.take_damage(total_damage)
+   
   if not other.alive():
    self.score += 1 # score/0 + 1
-  print(f"{other.name} is defeated! Score: {self.score}")
+   print(f"{other.name} is defeated! Score: {self.score}")
   
   
 class equipment:
@@ -79,20 +81,24 @@ def playerpreset(select): # return to this  playerpreset(choice). this would be 
 
 
 def combat():
+
  enemys_list = enemy + bosses
  random.shuffle(enemys_list) # shuffle to new list
 
  for opponent in enemys_list:
+   time.sleep(1)
    print(f'a {opponent.name} caught you')
    while opponent.alive() and player_set.alive(): # connect form line nine
     player_set.attacks(opponent)
+    time.sleep(0) 
     if opponent.alive():
      opponent.attack(player_set)
+     time.sleep(0) 
     if not player_set.alive():
      print("You have Varnish")
-     
+     return
     
-    else:
+   if not opponent.alive() == True:
      print(f'You defeat {opponent.name} \n continue your journey')
 
 
@@ -112,7 +118,7 @@ def menu ():
  (C) High Score
  (D) Exit''')
  while True:
-  choose = input('choose').upper()
+  choose = input('choose: ').upper()
   if choose == 'A':
    create_game()
   elif choose == 'B':
@@ -134,7 +140,7 @@ def create_game ():
  (B) Dagger
  (C) Tank
  (D) Back to menu''')
-  choose = (input('choose a class for your adventure')).upper()
+  choose = (input('choose a class for your adventure: ')).upper()
   if choose in ['A', 'B', 'C']: # since there 3 option of choosing character from character preset 
                                 # using elif as exit.
                                 #by using in/or used shared behavior
