@@ -1,0 +1,5 @@
+Knight
+1000
+10
+<__main__.equipment object at 0x102ca0d70>
+0

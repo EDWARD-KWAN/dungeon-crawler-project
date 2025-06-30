@@ -116,11 +116,16 @@ def map(): # put define function
         pass
   
     def findsomething():
+        global player_set
         find = random.choice(['nothing', 'enemy', 'heal'])
         if find == 'enemy':
             combat()
         elif find == 'heal':
-            print('u find a camp in your endless journey u increase your health ')
+            heal = random.randint(20, 100)
+            player_set.health += heal
+            print(f'u find a camp in your endless journey u increase your health by {heal}')
+            print(f'player health is {player_set.health}')
+
         elif find == 'nothing':
             print ( 'your continue walking day to day in wat search within it')
         
@@ -132,7 +137,9 @@ def map(): # put define function
 
         if move == 'l':
             print("Leaving the map...")
-            break # use for save implatation
+            save_game()
+            menu()
+            
 
         # remove the used player pos old position when it loop again
         grid[y][x] = '-'
@@ -160,7 +167,7 @@ def save_game():
    f.write(f"{player_set.name}\n")
    f.write(f"{player_set.health}\n")
    f.write(f"{player_set.damage}\n")
-   f.write(f"{player_set.equipment.name}\n")
+   f.write(f"{player_set.equipment}\n")
    f.write(f"{player_set.score}\n")
    print("this file is save")
 
@@ -173,7 +180,14 @@ def all_previous_highscore():
 def load_game():
  global player_set
  with open("save_game.txt", "r") as f:
-  pass
+        name = f.readline().strip() # remove space
+        health = int(f.readline()) # need text to int for the code
+        damage = int(f.readline())
+        equipment = f.readline().strip()
+        score = int(f.readline())
+        player_set = player(name, health, damage,equipment) # connect all of it of player set
+        player_set.score = score
+  
 
  
  
