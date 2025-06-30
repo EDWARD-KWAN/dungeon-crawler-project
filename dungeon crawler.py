@@ -172,17 +172,25 @@ def save_game():
    print("this file is save")
 
 def all_previous_highscore():
- with open ("highscore.txt", "w") as f:
-   f.write(f"{player_set.name}\n")
-   f.write(f"{player_set.score}\n")
-   print('ur high score')
+  try:
+   with open ("highscore.txt", "a") as f:
+    f.write(f'{player_set.name} high score {player_set.score}\n')
+  
+   with open("highscore.txt", "r") as f:
+     all = f.read()
+     print(all)
+  except Exception as error:
+    print('error saving high score',error)
+
+
+    
 
 def load_game():
  global player_set
  with open("save_game.txt", "r") as f:
         name = f.readline().strip() # remove space
         health = int(f.readline()) # need text to int for the code
-        damage = int(f.readline())
+        damage = int(f.readline()) #each call of readline will continue to next line
         equipment = f.readline().strip()
         score = int(f.readline())
         player_set = player(name, health, damage,equipment) # connect all of it of player set
@@ -203,10 +211,11 @@ def menu ():
   choose = input('choose: ').upper()
   if choose == 'A':
    create_game()
-  elif choose == 'B':
+  elif choose == 'B': # put load file
+   load_game()
    continue_play ()
   elif choose == 'C':
-   pass
+   all_previous_highscore()
   elif choose == 'D':
    break
   else:
