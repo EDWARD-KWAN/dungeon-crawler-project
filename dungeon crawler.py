@@ -90,12 +90,13 @@ def combat():
    print(f'a {opponent.name} caught you')
    while opponent.alive() and player_set.alive(): # connect form line nine
     player_set.attacks(opponent)
-    time.sleep(0) 
+    time.sleep(1) 
     if opponent.alive():
      opponent.attack(player_set)
-     time.sleep(0) 
+     time.sleep(1) 
     if not player_set.alive():
      print("You have Varnish")
+     all_previous_highscore()
      menu()
      return
     
@@ -215,7 +216,12 @@ def menu ():
    load_game()
    continue_play ()
   elif choose == 'C':
-   all_previous_highscore()
+   try:
+    with open("highscore.txt", "r") as f:
+     content = f.read()
+     print(content)
+   except Exception as error:
+    print('error saving high score',error)
   elif choose == 'D':
    break
   else:
