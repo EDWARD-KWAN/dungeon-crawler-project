@@ -7,22 +7,22 @@ class entity:
   self.damage = damage
 
  def alive(self):
-  return self.health > 0
+  return self.health > 0 # if not less or equal zero entity alive
 
- def take_damage(self, amount):
-  self.health -= amount # damage amount
+ def take_damage(self, amount):# amount of set damage
+  self.health -= amount # damage amount / health - amount
   print(f"{self.name} took {amount} damage. Remaining health: {self.health}")
 
  def attack(self, other): # other user /enemy
   print(f"{self.name} attacks {other.name} for {self.damage} damage!")
-  other.take_damage(self.damage)
+  other.take_damage(self.damage) # connect dake damage to entity damage taken
   
 
   
 class player (entity):
- def __init__(self, name, health, damage,equipment):
+ def __init__(self, name, health, damage,equipment): # have another equipment 
   super().__init__(name, health, damage)
-  self.equipment = equipment
+  self.equipment = equipment # have a equipment attach to
   self.score = 0 # set the score, cannot be an attribute
  
  def attacks(self, other):
@@ -32,13 +32,13 @@ class player (entity):
    print(f"{self.name} attacks with {self.equipment.name} for {total_damage} damage!")
    other.take_damage(total_damage)
    
-  if not other.alive():
+  if not other.alive(): # if enemy die
    self.score += 1 # score/0 + 1
    print(f"{other.name} is defeated! Score: {self.score}")
   
   
 class equipment:
- def __init__(self, name, damagemult):
+ def __init__(self, name, damagemult): # equipment use for mult damage
   self.name = name
   self.damagemult = damagemult
 sword= equipment('sword', 2)
@@ -49,7 +49,7 @@ beserk = equipment('fire', 1)
 
 class enemies(entity):
  def __init__(self, name, health, damage):
-  super().__init__(name, health, damage)
+  super().__init__(name, health, damage) 
 
  
 class boss(entity):
@@ -63,7 +63,7 @@ enemy = [
     enemies("Warlord", 70, 15)
 ]
 bosses = [
-    boss("Dragon", 100, 20),
+    boss("Dragon", 100, 20), # name health damage
     boss("King", 150, 25),
     boss("Goliath", 200, 30),
     boss("God", 500, 50)
@@ -71,7 +71,7 @@ bosses = [
 def playerpreset(select): # return to this  playerpreset(choice). this would be used in new game selection
                           # this to make it more easier
     if select == 'A':
-        return player("Knight", 1000, 10, sword)
+        return player("Knight", 1000, 10, sword) # connect of player and also add variable of equipment use
     elif select == 'B':
         return player("Assassin", 7000, 20, dagger)
     elif select == 'C':
@@ -85,20 +85,20 @@ def combat():
  enemys_list = enemy + bosses
  random.shuffle(enemys_list) # shuffle to new list
 
- for opponent in enemys_list:
+ for opponent in enemys_list: # open opponent enemy list
    time.sleep(1)
-   print(f'a {opponent.name} caught you')
+   print(f'a {opponent.name} caught you') # open one enemy 
    while opponent.alive() and player_set.alive(): # connect form line nine
     player_set.attacks(opponent)
-    time.sleep(1) 
+    time.sleep(1) # delay 1 second
     if opponent.alive():
      opponent.attack(player_set)
      time.sleep(1) 
     if not player_set.alive():
      print("You have Varnish")
-     all_previous_highscore()
-     menu()
-     return
+     all_previous_highscore() # save highscore
+     menu() # back to menu
+     return # stop other program running
     
    if not opponent.alive() == True:
      print(f'You defeat {opponent.name} \n continue your journey')
@@ -120,10 +120,10 @@ def map(): # put define function
         global player_set
         find = random.choice(['nothing', 'enemy', 'heal'])
         if find == 'enemy':
-            combat()
+            combat() # send to combat
         elif find == 'heal':
             heal = random.randint(20, 100)
-            player_set.health += heal
+            player_set.health += heal # health + heal random 20 to 100
             print(f'u find a camp in your endless journey u increase your health by {heal}')
             print(f'player health is {player_set.health}')
 
@@ -164,7 +164,7 @@ def map(): # put define function
 
   
 def save_game():
- with open ("save_game.txt", "w") as f:
+ with open ("save_game.txt", "w") as f: # load all the player set file 
    f.write(f"{player_set.name}\n")
    f.write(f"{player_set.health}\n")
    f.write(f"{player_set.damage}\n")
@@ -172,7 +172,7 @@ def save_game():
    f.write(f"{player_set.score}\n")
    print("this file is save")
 
-def all_previous_highscore():
+def all_previous_highscore(): # to only write previous high score
   try:
    with open ("highscore.txt", "a") as f:
     f.write(f'{player_set.name} high score {player_set.score}\n')
@@ -181,21 +181,21 @@ def all_previous_highscore():
      all = f.read()
      print(all)
   except Exception as error:
-    print('error saving high score',error)
+    print('error saving high score',error) # not use anymore. previouly for main menu
 
 
     
 
-def load_game():
+def load_game():# load the game
  global player_set
  with open("save_game.txt", "r") as f:
         name = f.readline().strip() # remove space
         health = int(f.readline()) # need text to int for the code
         damage = int(f.readline()) #each call of readline will continue to next line
-        equipment = f.readline().strip()
-        score = int(f.readline())
+        equipment = f.readline().strip() # something wrong
+        score = int(f.readline()) # text to int score variable
         player_set = player(name, health, damage,equipment) # connect all of it of player set
-        player_set.score = score
+        player_set.score = score #connect with player set
   
 
  
@@ -220,15 +220,15 @@ def menu ():
     with open("highscore.txt", "r") as f:
      content = f.read()
      print(content)
-   except Exception as error:
-    print('error saving high score',error)
+   except Exception as error: # use it to show error but not crash it
+    print('error saving high score',error)# show error
   elif choose == 'D':
-   break
+   break # stop program
   else:
    print('error try again')
    menu()
   
-def create_game ():
+def create_game (): # choose character
  
  global player_set # relearn global since i forgot global can be vesatile in all function
  while True:
@@ -256,12 +256,12 @@ def create_game ():
 
 
 def continue_play ():
- if not player_set:
+ if not player_set: # not plyer set mean no player must need player set = none to work
   print ('you dont have a player selected')
   return # dosen't continue to start combat(). will start error
 
  print (f'hello {player_set.name} your journey have process')
- map()
+ map() # to map
 
 player_set =None # found that using none as null value is good so it won't give me error to define
 
